@@ -19,6 +19,7 @@ from data_to_paper.text.text_extractors import extract_all_external_brackets
 
 from .exceptions import LatexCompilationError, LatexNumCommandFormulaEvalError, \
     LatexNestedNumCommandError, LatexNumCommandNoExplanation, PlainNumberLatexNumCommandError
+from security import safe_command
 
 BIB_FILENAME: str = 'citations.bib'
 
@@ -197,7 +198,7 @@ def save_latex_and_compile_to_pdf(latex_content: str, file_stem: str, output_dir
         with open(latex_file_name, 'w', encoding='utf-8') as f:
             f.write(latex_content)
         try:
-            pdflatex_output = subprocess.run(pdflatex_params, **get_subprocess_kwargs())
+            pdflatex_output = safe_command.run(subprocess.run, pdflatex_params, **get_subprocess_kwargs())
         except FileNotFoundError:
             raise MissingInstallationError(package_name="pdflatex", instructions=PDFLATEX_INSTALLATION_INSTRUCTIONS)
         except subprocess.CalledProcessError as e:
@@ -215,8 +216,8 @@ def save_latex_and_compile_to_pdf(latex_content: str, file_stem: str, output_dir
                     except FileNotFoundError:
                         raise MissingInstallationError(package_name="bibtex",
                                                        instructions=PDFLATEX_INSTALLATION_INSTRUCTIONS)
-                subprocess.run(pdflatex_params, **get_subprocess_kwargs(capture=False))
-                subprocess.run(pdflatex_params, **get_subprocess_kwargs(capture=False))
+                safe_command.run(subprocess.run, pdflatex_params, **get_subprocess_kwargs(capture=False))
+                safe_command.run(subprocess.run, pdflatex_params, **get_subprocess_kwargs(capture=False))
             except subprocess.CalledProcessError:
                 _move_latex_and_pdf_to_output_directory(file_stem, output_directory, latex_file_name)
                 raise
