@@ -1,6 +1,5 @@
 from __future__ import annotations
 import os
-import pickle
 from dataclasses import dataclass, field
 from fnmatch import fnmatch
 from pathlib import Path
@@ -21,6 +20,7 @@ from data_to_paper.run_gpt_code.run_issues import CodeProblem, RunIssue
 
 from .file_view_params import ContentViewPurposeConverter, ViewPurpose
 from .ref_numeric_values import ReferencedValue, HypertargetFormat
+import fickling
 
 """
 OUTPUT FILEE REQUIREMENTS
@@ -261,7 +261,7 @@ class PickleContentOutputFileRequirement(ReferencableContentOutputFileRequiremen
         Return the content of the file.
         """
         with open(file_path, 'rb') as file:
-            return pickle.load(file)
+            return fickling.load(file)
 
 
 @dataclass(frozen=True)
