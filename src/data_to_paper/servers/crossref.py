@@ -161,7 +161,7 @@ class CrossrefServerCaller(ParameterizedQueryServerCaller):
                       "editor,ISBN",
         }
 
-        response = requests.get(CROSSREF_URL, headers=HEADERS, params=params)
+        response = requests.get(CROSSREF_URL, headers=HEADERS, params=params, timeout=60)
 
         if response.status_code != 200:
             raise ServerErrorException(server=cls.name, response=response)

@@ -146,7 +146,7 @@ class SemanticScholarPaperServerCaller(ParameterizedQueryServerCaller):
             print_and_log_red(f'QUERYING SEMANTIC SCHOLAR FOR: "{query}"', should_log=False)
             headers = {'x-api-key': SEMANTIC_SCHOLAR_API_KEY.key} if SEMANTIC_SCHOLAR_API_KEY.key else {}
             for attempt in range(3):
-                response = requests.get(PAPER_SEARCH_URL, headers=headers, params=params)
+                response = requests.get(PAPER_SEARCH_URL, headers=headers, params=params, timeout=60)
                 if response.status_code not in (504, 429):
                     break
                 wait_time = 2 ** attempt  # Exponential backoff
@@ -246,7 +246,7 @@ class SemanticScholarEmbeddingServerCaller(ParameterizedQueryServerCaller):
             raise ValueError("Paper must have 'paper_id', 'title' and 'abstract' attributes.")
 
         print_and_log_red(f'GETTING SEMANTIC SCHOLAR EMBEDDING FOR: "{paper["title"]}"', should_log=False)
-        response = requests.post(EMBEDDING_URL, json=[paper])
+        response = requests.post(EMBEDDING_URL, json=[paper], timeout=60)
 
         if response.status_code != 200:
             raise ServerErrorException(server=cls.name, response=response)
