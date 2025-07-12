@@ -11,6 +11,7 @@ import shutil
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Optional, List
+from security import safe_command
 
 # Configuration
 PYPI_REPO = "pypi"  # Default repository
@@ -136,8 +137,7 @@ def check_git_clean():
 def run_command(cmd: list, capture=False):
     """Run shell command with error handling"""
     try:
-        result = subprocess.run(
-            cmd,
+        result = safe_command.run(subprocess.run, cmd,
             check=True,
             text=True,
             capture_output=capture,

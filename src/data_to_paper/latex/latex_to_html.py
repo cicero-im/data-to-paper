@@ -8,6 +8,7 @@ from data_to_paper.terminate.resource_checking import resource_checking
 from data_to_paper.latex.clean_latex import process_latex_text_and_math
 from data_to_paper.utils.file_utils import run_in_temp_directory
 from data_to_paper.text.text_formatting import escape_html
+from security import safe_command
 
 
 @resource_checking("Checking Pandoc installation")
@@ -69,7 +70,7 @@ def convert_latex_to_html(latex: str) -> str:
                 with open(tex_file, 'w', encoding='utf-8') as f:
                     f.write(latex)
                 # Convert using Pandoc
-                output = subprocess.run(command, universal_newlines=True, **get_subprocess_kwargs())
+                output = safe_command.run(subprocess.run, command, universal_newlines=True, **get_subprocess_kwargs())
                 return output.stdout
         except subprocess.CalledProcessError:
             # In case of an error, return the raw latex with proper escaping for HTML
