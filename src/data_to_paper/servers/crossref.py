@@ -1,11 +1,10 @@
 from typing import List, Mapping, Any
-
-import requests
 from unidecode import unidecode
 
 from .base_server import ParameterizedQueryServerCaller
 from .custom_types import Citation
 from .types import ServerErrorException
+from security import safe_requests
 
 CROSSREF_URL = "https://api.crossref.org/works"
 
@@ -161,7 +160,7 @@ class CrossrefServerCaller(ParameterizedQueryServerCaller):
                       "editor,ISBN",
         }
 
-        response = requests.get(CROSSREF_URL, headers=HEADERS, params=params)
+        response = safe_requests.get(CROSSREF_URL, headers=HEADERS, params=params)
 
         if response.status_code != 200:
             raise ServerErrorException(server=cls.name, response=response)
