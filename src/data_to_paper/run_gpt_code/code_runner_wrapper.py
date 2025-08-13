@@ -17,6 +17,7 @@ from data_to_paper.utils.types import ListBasedSet
 from .base_run_contexts import MultiRunContext
 from .cache_runs import CacheRunToFile
 from .exceptions import FailedRunningCode, CodeTimeoutException
+import fickling
 
 # process.queue fails on Mac OS X with large objects. Use file-based transfer instead.
 RUN_CACHE_FILEPATH = Mutable(None)
@@ -89,7 +90,7 @@ class CodeRunnerWrapper(CacheRunToFile):
             )
         else:
             with open(queue_or_filepath, 'rb') as f:
-                result = pickle.load(f)
+                result = fickling.load(f)
             os.remove(queue_or_filepath)
             if isinstance(result, Exception):
                 raise result

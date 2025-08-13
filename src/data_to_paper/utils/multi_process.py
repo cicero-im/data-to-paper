@@ -3,6 +3,7 @@ import os
 import pickle
 import tempfile
 import uuid
+import fickling
 
 
 def process_func(queue, func, *args, **kwargs):
@@ -35,7 +36,7 @@ def run_func_in_separate_process(func, *args, in_separate_process=True,
     process.join()
     if use_file_instead_of_queue:
         with open(queue_or_filepath, 'rb') as f:
-            result_exception = pickle.load(f)
+            result_exception = fickling.load(f)
         os.remove(queue_or_filepath)
     else:
         result_exception = queue_or_filepath.get()
