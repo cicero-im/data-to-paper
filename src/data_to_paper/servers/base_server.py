@@ -9,6 +9,7 @@ from typing import Union, Optional
 from data_to_paper.env import CHOSEN_APP, DELAY_SERVER_CACHE_RETRIEVAL
 from .json_dump import dump_to_json, load_from_json
 from .serialize_exceptions import serialize_exception, is_exception, de_serialize_exception
+import fickling
 
 
 class NoMoreResponsesToMockError(Exception):
@@ -374,4 +375,4 @@ class ParameterizedQueryServerCaller(ServerCaller, ABC):
 
     def _load_records(self, filepath):
         with open(filepath, 'rb') as filepath:
-            return pickle.load(filepath)
+            return fickling.load(filepath)

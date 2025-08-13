@@ -15,6 +15,7 @@ from typing import Union
 from data_to_paper.env import DELAY_CODE_RUN_CACHE_RETRIEVAL
 from data_to_paper.utils.file_utils import run_in_directory
 from data_to_paper.utils.print_to_file import print_and_log
+import fickling
 
 
 def old_directory_hash(directory):
@@ -125,7 +126,7 @@ class CacheRunToFile:
         filename = filename or self.cache_filepath
         if os.path.exists(filename):
             with open(filename, 'rb') as f:
-                return pickle.load(f)
+                return fickling.load(f)
         return {}
 
     def _dump_cache(self, cache, filename=None):

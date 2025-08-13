@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from data_to_paper.utils.print_to_file import print_and_log
 from data_to_paper.base_cast import Agent
 from .conversation import Conversation
+import fickling
 
 
 @dataclass(frozen=True)
@@ -113,7 +114,7 @@ class Actions(List[Action]):
         """
         with open(file_path, 'rb') as f:
             self.clear()
-            self.extend(pickle.load(f))
+            self.extend(fickling.load(f))
         return self
 
     def get_actions_for_conversation(self, conversation_name: str) -> List[Action]:
